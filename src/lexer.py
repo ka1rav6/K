@@ -1,24 +1,29 @@
 import re
 
 TOKENS:list = [
-    ("NUMBER",   r"\d+"),
-    ("STRING",   r'"[^"]*"|\'[^\']*\''),
-    ("ARROW",    r"->"),
+    ("NUMBER",r"\d+"),
+    ("STRING",r'"[^"]*"|\'[^\']*\''),
+    ("ARROW",r"->"),
     ("MULTICOMMENT", r"///.*?///"),
     ("COMMENT", r"//.*"),
-    ("COLON",    r":"),
-    ("COMMA",    r","),
-    ("EQUAL",    r"="),
-    ("STAR",     r"\*"),
-    ("LPAREN",   r"\("),
-    ("RPAREN",   r"\)"),
-    ("LBRACE",   r"\{"),
-    ("RBRACE",   r"\}"),
+    ("COLON",r":"),
+    ("COMMA",r","),
+    ("EQUAL",r"="),
+    ("STAR", r"\*"),
+    ("LPAREN", r"\("),
+    ("RPAREN", r"\)"),
+    ("LBRACE", r"\{"),
+    ("RBRACE", r"\}"),
     ("LBRACKET", r"\["),
     ("RBRACKET", r"\]"),
-    ("IDENT",    r"[a-zA-Z_][a-zA-Z0-9_]*"),
-    ("NEWLINE",  r"\n"),
-    ("SKIP",     r"[ \t]+"),
+    ("IDENT", r"[a-zA-Z_][a-zA-Z0-9_]*"),
+    ("NEWLINE", r"\n"),
+    ("SKIP",r"[ \t]+"),
+    ("PLUS",r"\+"),
+    ("MINUS",  r"\-"),
+    ("SLASH",r"/"),
+    ("MULT", r"\*"),
+    ("MOD", r"\%"),
     ("MISMATCH", r"."),
 ]
 KEYWORDS:set ={
@@ -71,13 +76,20 @@ def tokenise(lines:list[str]) -> list[list[tuple[str, str]]]:
 ###
 if __name__ == "__main__":
     def test():
-        code = ["x:ptr(int) = *x", 
-                '''
-                fn myfunc(y:int, x:int){
-                    x:int = 5
-                    return x
+        code = ["""fn main(){
+                cout('hello world\n')
+                x: int = 5
+                y:int = 4
+                z:int = 4 + 5
+                x = 3
                 }
-                
-                ''']
+                """
+                """fn hello(x:int){
+                    cout("This is a function\n")
+                    x = 9
+                    return x
+                }"""
+
+                ]
         print(tokenise(code))
     test()
