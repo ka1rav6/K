@@ -54,7 +54,8 @@ def compile_and_run(cpp_file:str)->None:
     except subprocess.CalledProcessError as e:
         print(f"Error occurred: {e}")
     finally:
-        if os.path.exists(exe_file):
-            os.remove(exe_file)
+        # if os.path.exists(exe_file):
+        #     os.remove(exe_file)
+        #allowing users to actually keep the executable to avoid re-compiling each time
         if os.path.exists(cpp_file):
             os.remove(cpp_file)
