@@ -27,7 +27,6 @@ def group_statements(tokens:list[list[tuple]]) -> list[list[tuple]]:
                 if current:
                     grouped.append(current)
                 current = [tok]
-
             else:
                 current.append(tok)
 
@@ -44,7 +43,6 @@ def parser(tokens:list)->list:
     tokens = group_statements(tokens)
     AST = []
     prev = None
-
     for token in tokens:
         stmt_type = statementType(token)
         if stmt_type == parseElse:
@@ -88,10 +86,9 @@ def statementType(token_line:list):
 
 if __name__ == "__main__":
     def test():
-        token = [('KEYWORD', 'fn'), ('IDENT', 'myfunc'), ('LPAREN', '('), ('IDENT', 'y'), ('COLON', ':'), ('IDENT', 'int'), ('COMMA', ','), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('RPAREN', ')'), ('LBRACE', '{'), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 5), ('KEYWORD', 'return'), ('IDENT', 'x'), ('RBRACE', '}')]
+        token = [('KEYWORD', 'fn'), ('IDENT', 'main'), ('LPAREN', '('), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', "'hello world\n'"), ('RPAREN', ')'), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 5), ('IDENT', 'y'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('IDENT', 'z'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('PLUS', '+'), ('NUMBER', 5), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 3), ('RBRACE', '}'), ('KEYWORD', 'fn'), ('IDENT', 'hello'), ('LPAREN', '('), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', '"This is a function\n"'), ('RPAREN', ')'), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 9), ('KEYWORD', 'return'), ('IDENT', 'x'), ('RBRACE', '}')] 
+
         obj = parseFunc(token)
-        
-        
         
         print(f"{obj.name} , {obj.params}, {obj.content} ")
     test()
