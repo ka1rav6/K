@@ -24,6 +24,9 @@ TOKENS:list = [
     ("SLASH",r"/"),
     ("MULT", r"\*"),
     ("MOD", r"\%"),
+    ("AND", r"\&\&"),
+    ("OR", r"\|\|"),
+    ("NOT", r"\~"),
     ("MISMATCH", r"."),
 ]
 KEYWORDS:set ={
