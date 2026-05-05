@@ -2,16 +2,38 @@ from parsingComponents.VariableParser import parseVar, parseAssignment
 from parsingComponents.FunctionParser import parseFunc, parseLambda, parseReturn
 from parsingComponents.IfElseParser import parseIf, parseElse, IfStatement, parseElif
 
+class FunctionCall:
+    def __init__(self, name:str, args:list):
+        self.name = name
+        self.args = args
+    def __repr__(self):
+        return f"FunctionCall({self.name}, {self.args})"
+
+def parseFunctionCall(token_line:list):
+    name = token_line[0][1]
+    if len(token_line) < 3 or token_line[1][0] != "LPAREN":
+        raise SyntaxError(f"{name} must be followed by parentheses")
+    i = 2
+    args = []
+    while i < len(token_line) and token_line[i][0] != "RPAREN":
+        if token_line[i][0] != "COMMA":
+            args.append(token_line[i])
+        i += 1
+    return FunctionCall(name, args)
+
 def group_statements(tokens:list[list[tuple]]) -> list[list[tuple]]:
     
     '''
         Groups statements and assigns them depth as well (for proper nesting)
     '''
+    STMT_KEYWORDS = {"cout", "cin", "fn", "lambda", "return", "if", "else", "elif", "delete", "break", "continue", "try", "except", "throw"}
     grouped = []
     current = []
     depth = 0
     for line in tokens:
         for tok in line:
+            if not isinstance(tok, tuple):
+                raise TypeError(f"Invalid token: {tok}, expected tuple")
             if tok[0] == "LBRACE":
                 depth += 1
                 current.append(tok)
@@ -23,10 +45,15 @@ def group_statements(tokens:list[list[tuple]]) -> list[list[tuple]]:
                     grouped.append(current)
                     current = []
 
-            elif tok[0] == "KEYWORD" and tok[1] == "return" and depth == 0:
-                if current:
+            elif depth == 0 and current:
+                if tok[0] == "IDENT" and current[-1][0] not in ("KEYWORD", "COLON", "EQUAL", "PLUS", "MINUS", "STAR", "SLASH", "MOD", "COMMA", "LPAREN", "LBRACKET"):
                     grouped.append(current)
-                current = [tok]
+                    current = [tok]
+                elif tok[0] == "KEYWORD" and tok[1] in STMT_KEYWORDS:
+                    grouped.append(current)
+                    current = [tok]
+                else:
+                    current.append(tok)
             else:
                 current.append(tok)
 
@@ -40,7 +67,8 @@ def parser(tokens:list)->list:
         Creates an AST from all the tokens all together by parsing them one by one.
     
     '''
-    tokens = group_statements(tokens)
+    # tokens = group_statements(tokens) 
+    ## already doing before so that it is not called again while function parsing
     AST = []
     prev = None
     for token in tokens:
@@ -80,15 +108,17 @@ def statementType(token_line:list):
         return parseElse
     elif token_line[0] == ("KEYWORD", "elif"):
         return parseElif
+    elif token_line[0][0] == "KEYWORD" and token_line[0][1] in ("cout", "cin"):
+        return parseFunctionCall
     else:
-        raise SyntaxError("Could not find statement type")
+        raise SyntaxError(f"Could not find statement type: {token_line[0]}")
 
 
 if __name__ == "__main__":
     def test():
-        token = group_statements([[('KEYWORD', 'fn'), ('IDENT', 'main'), ('LPAREN', '('), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', "'hello world\n'"), ('RPAREN', ')'), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 5), ('IDENT', 'y'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('IDENT', 'z'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('PLUS', '+'), ('NUMBER', 5), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 3), ('RBRACE', '}'), ('KEYWORD', 'fn'), ('IDENT', 'hello'), ('LPAREN', '('), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', '"This is a function\n"'), ('RPAREN', ')'), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 9), ('KEYWORD', 'return'), ('IDENT', 'x'), ('RBRACE', '}')]] )
+        token = group_statements([[('KEYWORD', 'fn'), ('IDENT', 'main'), ('LPAREN', '('), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', "'hello world\n'"), ('RPAREN', ')'), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 5), ('IDENT', 'y'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('IDENT', 'z'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('PLUS', '+'), ('NUMBER', 5), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 3), ('RBRACE', '}'), ('KEYWORD', 'fn'), ('IDENT', 'hello'), ('LPAREN', '('), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', '"This is a function\n"'), ('RPAREN', ')'), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 9), ('KEYWORD', 'return'), ('IDENT', 'x'), ('RBRACE', '}')]])
         print(token)
-        obj = parseFunc(token)
+        obj = parser(token)
         print("========================================================")
-        print(f"{obj.name} , {obj.params}, {obj.content} ")
+        print(f"{obj}")
     test()
