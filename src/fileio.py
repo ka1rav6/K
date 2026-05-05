@@ -27,7 +27,8 @@ def write_file(input_file:str, cpp_code:list[str])->str:
         Creates the cpp file and writes the code to it
     '''
     
-    output_file = f"./{input_file}.cpp"
+    base = os.path.splitext(input_file)[0]
+    output_file = f"{base}.cpp"
     with open(output_file, 'w') as f:
         f.write("\n".join(cpp_code))
     return output_file
