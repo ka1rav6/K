@@ -86,9 +86,9 @@ def statementType(token_line:list):
 
 if __name__ == "__main__":
     def test():
-        token = [('KEYWORD', 'fn'), ('IDENT', 'main'), ('LPAREN', '('), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', "'hello world\n'"), ('RPAREN', ')'), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 5), ('IDENT', 'y'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('IDENT', 'z'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('PLUS', '+'), ('NUMBER', 5), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 3), ('RBRACE', '}'), ('KEYWORD', 'fn'), ('IDENT', 'hello'), ('LPAREN', '('), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', '"This is a function\n"'), ('RPAREN', ')'), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 9), ('KEYWORD', 'return'), ('IDENT', 'x'), ('RBRACE', '}')] 
-
+        token = group_statements([[('KEYWORD', 'fn'), ('IDENT', 'main'), ('LPAREN', '('), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', "'hello world\n'"), ('RPAREN', ')'), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 5), ('IDENT', 'y'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('IDENT', 'z'), ('COLON', ':'), ('IDENT', 'int'), ('EQUAL', '='), ('NUMBER', 4), ('PLUS', '+'), ('NUMBER', 5), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 3), ('RBRACE', '}'), ('KEYWORD', 'fn'), ('IDENT', 'hello'), ('LPAREN', '('), ('IDENT', 'x'), ('COLON', ':'), ('IDENT', 'int'), ('RPAREN', ')'), ('LBRACE', '{'), ('KEYWORD', 'cout'), ('LPAREN', '('), ('STRING', '"This is a function\n"'), ('RPAREN', ')'), ('IDENT', 'x'), ('EQUAL', '='), ('NUMBER', 9), ('KEYWORD', 'return'), ('IDENT', 'x'), ('RBRACE', '}')]] )
+        print(token)
         obj = parseFunc(token)
-        
+        print("========================================================")
         print(f"{obj.name} , {obj.params}, {obj.content} ")
     test()

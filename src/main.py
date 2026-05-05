@@ -13,5 +13,5 @@ if __name__ == "__main__":
     cpp_code = []
     for token in tokens:
         cpp_code.append(to_cpp(token))
-    cpp_file = write_file(cpp_code)
+    cpp_file = write_file(FILE, cpp_code)
     compile_and_run(cpp_file)

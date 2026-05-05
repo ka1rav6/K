@@ -1,3 +1,11 @@
+'''
+    Why I think we need this:
+    error statements:
+    SYNTAX_ERROR
+    function should be of the type: fn func1(){...}
+    instead found: LINE
+
+'''
 
 def untokenise(token:list[tuple[str,str]])->str:
     line = " ".join([str(i[1]) for i in token]) #TODO: Fix this to show only one line

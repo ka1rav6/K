@@ -21,13 +21,13 @@ def read_file(input_file:str)->list[str]:
     
     return code
 
-def write_file(cpp_code:list[str])->str:
+def write_file(input_file:str, cpp_code:list[str])->str:
     
     '''
         Creates the cpp file and writes the code to it
     '''
     
-    output_file = "./temp.cpp"
+    output_file = f"./{input_file}.cpp"
     with open(output_file, 'w') as f:
         f.write("\n".join(cpp_code))
     return output_file
@@ -42,7 +42,7 @@ def compile_and_run(cpp_file:str)->None:
     
     checkFileExistance(cpp_file)
     
-    exe_file = "temp"
+    exe_file = f"{cpp_file[:-4]}" # Hence same name as the cpp file
     try:
         compile_cmd = ["clang++", cpp_file, "-o", exe_file]
         print("Compiling...")
