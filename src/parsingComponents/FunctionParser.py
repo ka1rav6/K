@@ -10,8 +10,11 @@ def parseReturn(token_line:list):
         if len(token_line) < 2:
             raise SyntaxError("return must have a value")
         value = token_line[1:]
-        from parser import parser
-        return ReturnStatement(parser([value])[0])
+        if len(value) == 1:
+            return ReturnStatement(value[0])
+        from parser import parser, group_statements
+        grouped = group_statements([value])
+        return ReturnStatement(parser(grouped)[0])
 
 class FunctionDeclaration:
     def __init__(self, name:str, params:list, content:list):
@@ -20,16 +23,10 @@ class FunctionDeclaration:
         self.content = self.content_parser(content)
     def content_parser(self, content):
         
-        from parser import parser #imported hear to avoid circular imports
+        from parser import parser, group_statements
         
-        i = -1
-        if ("KEYWORD", "return") in content:
-            ret_index = content.index(("KEYWORD", "return"))
-            main_content = content[:ret_index]
-        else:
-            main_content = content
-            
-        return parser([main_content])
+        grouped = group_statements([content])
+        return parser(grouped)
     def param_parser(self, params:list)->list:
         parsed = []
         current = []
@@ -59,12 +56,11 @@ def parseFunc(token_line:list)->FunctionDeclaration:
         raise SyntaxError("function declaration should be followed by parenthesis")
     i+=1
     params = []
-    while token_line[i][0] != "RPAREN":
-        try:
-            params.append(token_line[i])
-            i+=1
-        except IndexError:
-            raise IndexError("Parenthesis is not closed in function declaration")
+    while i < len(token_line) and token_line[i][0] != "RPAREN":
+        params.append(token_line[i])
+        i+=1
+    if i >= len(token_line):
+        raise SyntaxError("Parenthesis is not closed in function declaration")
     i+=1
     if token_line[i][0] != "LBRACE":
         raise SyntaxError("Functions should be followed by curly braces inside which the function is defined")
