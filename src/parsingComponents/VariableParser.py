@@ -63,6 +63,7 @@ def parseVar(token_line:list)->VariableDeclaration:
             return VariableDeclaration(name, type)
     else:
         #TODO: vector, map etc cases
+        value = None
         if token_line[i][0] == "EQUAL":
             i+=1
             value = token_line[i][1]

@@ -9,11 +9,16 @@ class IfStatement:
         self.condition = condition
         self.content = self.parsecontent(content)
     def parsecontent(self, content:list):
-        from parser import parser
-        return parser([content])
+        from parser import parser, group_statements
+        grouped = group_statements([content])
+        return parser(grouped)
 class ElseStatement:
     def __init__(self, content:list):
-        self.content = content
+        self.content = self.parsecontent(content)
+    def parsecontent(self, content:list):
+        from parser import parser, group_statements
+        grouped = group_statements([content])
+        return parser(grouped)
 def parseIf(token_line:list):
     i = 1
     condition = []
