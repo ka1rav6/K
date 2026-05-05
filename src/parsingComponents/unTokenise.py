@@ -1,5 +1,5 @@
 
-def untokenise(token:list(tuple(str,str)))->str:
+def untokenise(token:list[tuple[str,str]])->str:
     line = " ".join([str(i[1]) for i in token]) #TODO: Fix this to show only one line
     return line
 if __name__ == "__main__":
