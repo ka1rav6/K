@@ -1,6 +1,4 @@
-from parsingComponents.VariableParser import parseVar, parseAssignment
-from parsingComponents.FunctionParser import parseFunc, parseLambda, parseReturn
-from parsingComponents.IfElseParser import parseIf, parseElse, IfStatement, parseElif
+from parsingComponents import *
 
 class FunctionCall:
     def __init__(self, name:str, args:list):
