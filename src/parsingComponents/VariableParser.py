@@ -66,10 +66,33 @@ def parseVar(token_line:list)->VariableDeclaration:
         value = None
         if token_line[i][0] == "EQUAL":
             i+=1
-            value = token_line[i][1]
-            i+=1            
+            remaining = token_line[i:]
+            if len(remaining) == 1:
+                value = remaining[0][1]
+            else:
+                # Multi-token expression (e.g. 4 + 5) — store as token list
+                value = remaining
     
     return VariableDeclaration(name, type, value)
 
-def parseAssignment(token_line:list)->VariableDeclaration: #type:ignore
-    pass
+class Assignment:
+    def __init__(self, name:str, value):
+        self.name = name
+        self.value = value
+    def __repr__(self):
+        return f"Assignment({self.name} = {self.value})"
+
+def parseAssignment(token_line:list):
+    if len(token_line) < 3:
+        raise SyntaxError("Assignment syntax: name = VALUE")
+    name = token_line[0][1]
+    if token_line[1][0] != "EQUAL":
+        raise SyntaxError("Assignment syntax: name = VALUE")
+    # Collect value tokens — could be a single value or an expression
+    value_tokens = token_line[2:]
+    if len(value_tokens) == 1:
+        value = value_tokens[0][1]
+    else:
+        # For expressions like 4 + 5, store as a list of tokens
+        value = value_tokens
+    return Assignment(name, value)
