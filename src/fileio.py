@@ -1,5 +1,6 @@
 import subprocess
 import os
+import shutil
 
 
 def checkFileExistance(file:str)->None:
@@ -44,9 +45,12 @@ def compile_and_run(cpp_file:str)->None:
     checkFileExistance(cpp_file)
     
     exe_file = f"{cpp_file[:-4]}" # Hence same name as the cpp file
+    compiler = shutil.which("clang++") or shutil.which("g++")
+    if not compiler:
+        raise FileNotFoundError("No C++ compiler found. Install clang++ or g++.")
     try:
-        compile_cmd = ["clang++", cpp_file, "-o", exe_file]
-        print("Compiling...")
+        compile_cmd = [compiler, cpp_file, "-o", exe_file]
+        print(f"Compiling with {os.path.basename(compiler)}...")
         subprocess.run(compile_cmd, check=True)
 
         print("Running executable...\n")
