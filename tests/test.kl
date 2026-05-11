@@ -1,0 +1,45 @@
+fn greet(name:int) {
+    cout("Hello user #")
+    cout(name)
+    cout("\n")
+}
+
+fn add(a:int, b:int) {
+    return a + b
+}
+
+fn main() {
+    cout("=== K Full Feature Test ===\n")
+
+    x:int = 10
+    y:int = 20
+    z:int = 4 + 5
+
+    cout("x = ")
+    cout(x)
+    cout(", y = ")
+    cout(y)
+    cout(", z = ")
+    cout(z)
+    cout("\n")
+
+    x = 99
+
+    if x == 99 {
+        cout("Branch 1: x is 99\n")
+    }
+    elif x == 50 {
+        cout("Branch 2: x is 50\n")
+    }
+    else {
+        cout("Branch 3: x is something else\n")
+    }
+
+    result:int = 0
+    cout("add(3, 7) = ")
+    result = add(3, 7)
+    cout(result)
+    cout("\n")
+
+    cout("All tests passed!\n")
+}
