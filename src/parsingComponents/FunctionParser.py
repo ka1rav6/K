@@ -12,9 +12,19 @@ def parseReturn(token_line:list):
         value = token_line[1:]
         if len(value) == 1:
             return ReturnStatement(value[0])
-        from parser import parser, group_statements
-        grouped = group_statements([value])
-        return ReturnStatement(parser(grouped)[0])
+        # Only re-parse if value looks like a statement (var decl, assignment, etc.)
+        # Otherwise treat as a raw expression (e.g. a + b, x * 2)
+        first = value[0]
+        is_statement = (
+            (first[0] == "KEYWORD") or
+            (len(value) >= 2 and first[0] == "IDENT" and value[1][0] in ("COLON", "EQUAL"))
+        )
+        if is_statement:
+            from parser import parser, group_statements
+            grouped = group_statements([value])
+            return ReturnStatement(parser(grouped)[0])
+        # Raw expression — store token list directly
+        return ReturnStatement(value)
 
 class FunctionDeclaration:
     def __init__(self, name:str, params:list, content:list):
