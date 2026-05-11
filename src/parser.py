@@ -44,7 +44,7 @@ def group_statements(tokens:list[list[tuple]]) -> list[list[tuple]]:
                     current = []
 
             elif depth == 0 and current:
-                if tok[0] == "IDENT" and current[-1][0] not in ("KEYWORD", "COLON", "EQUAL", "PLUS", "MINUS", "STAR", "SLASH", "MOD", "COMMA", "LPAREN", "LBRACKET"):
+                if tok[0] == "IDENT" and current[-1][0] not in ("KEYWORD", "COLON", "EQUAL", "PLUS", "MINUS", "STAR", "SLASH", "MOD", "COMMA", "LPAREN", "LBRACKET", "EQEQ", "NEQ", "LT", "GT", "LEQ", "GEQ", "AND", "OR"):
                     grouped.append(current)
                     current = [tok]
                 elif tok[0] == "KEYWORD" and tok[1] in STMT_KEYWORDS:
